@@ -1,0 +1,418 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="Toy_AuctionModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Auctions">
+          <Key>
+            <PropertyRef Name="AuctionID" />
+          </Key>
+          <Property Name="AuctionID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ToyID" Type="int" Nullable="false" />
+          <Property Name="WinningBidderID" Type="int" />
+          <Property Name="WinningBid" Type="decimal" Precision="5" Scale="0" />
+          <Property Name="AuctionStart" Type="datetime" />
+          <Property Name="Duration" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Colors">
+          <Key>
+            <PropertyRef Name="ColorID" />
+          </Key>
+          <Property Name="ColorID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="ColorName" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CurrentBids">
+          <Key>
+            <PropertyRef Name="BidderID" />
+            <PropertyRef Name="AuctionID" />
+            <PropertyRef Name="BidTime" />
+          </Key>
+          <Property Name="BidderID" Type="int" Nullable="false" />
+          <Property Name="AuctionID" Type="int" Nullable="false" />
+          <Property Name="BidTime" Type="datetime" Nullable="false" />
+          <Property Name="Bid" Type="decimal" Precision="5" Scale="0" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Toys">
+          <Key>
+            <PropertyRef Name="ToyID" />
+          </Key>
+          <Property Name="ToyID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="NumberLegs" Type="int" />
+          <Property Name="ColorID" Type="int" />
+          <Property Name="OwnerID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="varchar" MaxLength="25" Nullable="false" />
+          <Property Name="Address" Type="varchar" MaxLength="50" />
+          <Property Name="City" Type="varchar" MaxLength="25" />
+          <Property Name="State" Type="char" MaxLength="2" />
+          <Property Name="Zip" Type="char" MaxLength="5" />
+          <Property Name="Phone" Type="char" MaxLength="14" />
+          <Property Name="Email" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <Association Name="FK__Auctions__ToyID__2B3F6F97">
+          <End Role="Toys" Type="Self.Toys" Multiplicity="1" />
+          <End Role="Auctions" Type="Self.Auctions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Toys">
+              <PropertyRef Name="ToyID" />
+            </Principal>
+            <Dependent Role="Auctions">
+              <PropertyRef Name="ToyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Auctions__Winnin__2C3393D0">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="Auctions" Type="Self.Auctions" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Auctions">
+              <PropertyRef Name="WinningBidderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CurrentBi__Aucti__300424B4">
+          <End Role="Auctions" Type="Self.Auctions" Multiplicity="1" />
+          <End Role="CurrentBids" Type="Self.CurrentBids" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Auctions">
+              <PropertyRef Name="AuctionID" />
+            </Principal>
+            <Dependent Role="CurrentBids">
+              <PropertyRef Name="AuctionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CurrentBi__Bidde__2F10007B">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="CurrentBids" Type="Self.CurrentBids" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CurrentBids">
+              <PropertyRef Name="BidderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Toys__ColorID__276EDEB3">
+          <End Role="Colors" Type="Self.Colors" Multiplicity="0..1" />
+          <End Role="Toys" Type="Self.Toys" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Colors">
+              <PropertyRef Name="ColorID" />
+            </Principal>
+            <Dependent Role="Toys">
+              <PropertyRef Name="ColorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Toys__OwnerID__286302EC">
+          <End Role="Users" Type="Self.Users" Multiplicity="1" />
+          <End Role="Toys" Type="Self.Toys" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Toys">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Toy_AuctionModelStoreContainer">
+          <EntitySet Name="Auctions" EntityType="Self.Auctions" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Colors" EntityType="Self.Colors" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CurrentBids" EntityType="Self.CurrentBids" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Toys" EntityType="Self.Toys" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK__Auctions__ToyID__2B3F6F97" Association="Self.FK__Auctions__ToyID__2B3F6F97">
+            <End Role="Toys" EntitySet="Toys" />
+            <End Role="Auctions" EntitySet="Auctions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Auctions__Winnin__2C3393D0" Association="Self.FK__Auctions__Winnin__2C3393D0">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Auctions" EntitySet="Auctions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CurrentBi__Aucti__300424B4" Association="Self.FK__CurrentBi__Aucti__300424B4">
+            <End Role="Auctions" EntitySet="Auctions" />
+            <End Role="CurrentBids" EntitySet="CurrentBids" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CurrentBi__Bidde__2F10007B" Association="Self.FK__CurrentBi__Bidde__2F10007B">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="CurrentBids" EntitySet="CurrentBids" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Toys__ColorID__276EDEB3" Association="Self.FK__Toys__ColorID__276EDEB3">
+            <End Role="Colors" EntitySet="Colors" />
+            <End Role="Toys" EntitySet="Toys" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Toys__OwnerID__286302EC" Association="Self.FK__Toys__OwnerID__286302EC">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="Toys" EntitySet="Toys" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="Toy_AuctionModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Color">
+          <Key>
+            <PropertyRef Name="ColorID" />
+          </Key>
+          <Property Name="ColorID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ColorName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="Toys" Relationship="Toy_AuctionModel.FK__Toys__ColorID__276EDEB3" FromRole="Color" ToRole="Toy" />
+        </EntityType>
+        <EntityContainer Name="Toy_AuctionEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Colors" EntityType="Self.Color" />
+          <EntitySet Name="Toys" EntityType="Toy_AuctionModel.Toy" />
+          <AssociationSet Name="FK__Toys__ColorID__276EDEB3" Association="Toy_AuctionModel.FK__Toys__ColorID__276EDEB3">
+            <End Role="Color" EntitySet="Colors" />
+            <End Role="Toy" EntitySet="Toys" />
+          </AssociationSet>
+          <EntitySet Name="Auctions" EntityType="Toy_AuctionModel.Auction" />
+          <EntitySet Name="CurrentBids" EntityType="Toy_AuctionModel.CurrentBid" />
+          <EntitySet Name="Users" EntityType="Toy_AuctionModel.User" />
+          <AssociationSet Name="FK__Auctions__ToyID__2B3F6F97" Association="Toy_AuctionModel.FK__Auctions__ToyID__2B3F6F97">
+            <End Role="Toy" EntitySet="Toys" />
+            <End Role="Auction" EntitySet="Auctions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Auctions__Winnin__2C3393D0" Association="Toy_AuctionModel.FK__Auctions__Winnin__2C3393D0">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Auction" EntitySet="Auctions" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CurrentBi__Aucti__300424B4" Association="Toy_AuctionModel.FK__CurrentBi__Aucti__300424B4">
+            <End Role="Auction" EntitySet="Auctions" />
+            <End Role="CurrentBid" EntitySet="CurrentBids" />
+          </AssociationSet>
+          <AssociationSet Name="FK__CurrentBi__Bidde__2F10007B" Association="Toy_AuctionModel.FK__CurrentBi__Bidde__2F10007B">
+            <End Role="User" EntitySet="Users" />
+            <End Role="CurrentBid" EntitySet="CurrentBids" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Toys__OwnerID__286302EC" Association="Toy_AuctionModel.FK__Toys__OwnerID__286302EC">
+            <End Role="User" EntitySet="Users" />
+            <End Role="Toy" EntitySet="Toys" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="Toy">
+          <Key>
+            <PropertyRef Name="ToyID" />
+          </Key>
+          <Property Name="ToyID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="NumberLegs" Type="Int32" />
+          <Property Name="ColorID" Type="Int32" />
+          <Property Name="OwnerID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Color" Relationship="Toy_AuctionModel.FK__Toys__ColorID__276EDEB3" FromRole="Toy" ToRole="Color" />
+          <NavigationProperty Name="Auctions" Relationship="Toy_AuctionModel.FK__Auctions__ToyID__2B3F6F97" FromRole="Toy" ToRole="Auction" />
+          <NavigationProperty Name="User" Relationship="Toy_AuctionModel.FK__Toys__OwnerID__286302EC" FromRole="Toy" ToRole="User" />
+        </EntityType>
+        <Association Name="FK__Toys__ColorID__276EDEB3">
+          <End Type="Toy_AuctionModel.Color" Role="Color" Multiplicity="0..1" />
+          <End Type="Toy_AuctionModel.Toy" Role="Toy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Color">
+              <PropertyRef Name="ColorID" />
+            </Principal>
+            <Dependent Role="Toy">
+              <PropertyRef Name="ColorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Auction">
+          <Key>
+            <PropertyRef Name="AuctionID" />
+          </Key>
+          <Property Name="AuctionID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="ToyID" Type="Int32" Nullable="false" />
+          <Property Name="WinningBidderID" Type="Int32" />
+          <Property Name="WinningBid" Type="Decimal" Precision="5" Scale="0" />
+          <Property Name="AuctionStart" Type="DateTime" Precision="3" />
+          <Property Name="Duration" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Toy" Relationship="Toy_AuctionModel.FK__Auctions__ToyID__2B3F6F97" FromRole="Auction" ToRole="Toy" />
+          <NavigationProperty Name="User" Relationship="Toy_AuctionModel.FK__Auctions__Winnin__2C3393D0" FromRole="Auction" ToRole="User" />
+          <NavigationProperty Name="CurrentBids" Relationship="Toy_AuctionModel.FK__CurrentBi__Aucti__300424B4" FromRole="Auction" ToRole="CurrentBid" />
+        </EntityType>
+        <EntityType Name="CurrentBid">
+          <Key>
+            <PropertyRef Name="BidderID" />
+            <PropertyRef Name="AuctionID" />
+            <PropertyRef Name="BidTime" />
+          </Key>
+          <Property Name="BidderID" Type="Int32" Nullable="false" />
+          <Property Name="AuctionID" Type="Int32" Nullable="false" />
+          <Property Name="BidTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Bid" Type="Decimal" Nullable="false" Precision="5" Scale="0" />
+          <NavigationProperty Name="Auction" Relationship="Toy_AuctionModel.FK__CurrentBi__Aucti__300424B4" FromRole="CurrentBid" ToRole="Auction" />
+          <NavigationProperty Name="User" Relationship="Toy_AuctionModel.FK__CurrentBi__Bidde__2F10007B" FromRole="CurrentBid" ToRole="User" />
+        </EntityType>
+        <EntityType Name="User">
+          <Key>
+            <PropertyRef Name="UserID" />
+          </Key>
+          <Property Name="UserID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="Address" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="City" Type="String" MaxLength="25" FixedLength="false" Unicode="false" />
+          <Property Name="State" Type="String" MaxLength="2" FixedLength="true" Unicode="false" />
+          <Property Name="Zip" Type="String" MaxLength="5" FixedLength="true" Unicode="false" />
+          <Property Name="Phone" Type="String" MaxLength="14" FixedLength="true" Unicode="false" />
+          <Property Name="Email" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <NavigationProperty Name="Auctions" Relationship="Toy_AuctionModel.FK__Auctions__Winnin__2C3393D0" FromRole="User" ToRole="Auction" />
+          <NavigationProperty Name="CurrentBids" Relationship="Toy_AuctionModel.FK__CurrentBi__Bidde__2F10007B" FromRole="User" ToRole="CurrentBid" />
+          <NavigationProperty Name="Toys" Relationship="Toy_AuctionModel.FK__Toys__OwnerID__286302EC" FromRole="User" ToRole="Toy" />
+        </EntityType>
+        <Association Name="FK__Auctions__ToyID__2B3F6F97">
+          <End Type="Toy_AuctionModel.Toy" Role="Toy" Multiplicity="1" />
+          <End Type="Toy_AuctionModel.Auction" Role="Auction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Toy">
+              <PropertyRef Name="ToyID" />
+            </Principal>
+            <Dependent Role="Auction">
+              <PropertyRef Name="ToyID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Auctions__Winnin__2C3393D0">
+          <End Type="Toy_AuctionModel.User" Role="User" Multiplicity="0..1" />
+          <End Type="Toy_AuctionModel.Auction" Role="Auction" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Auction">
+              <PropertyRef Name="WinningBidderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CurrentBi__Aucti__300424B4">
+          <End Type="Toy_AuctionModel.Auction" Role="Auction" Multiplicity="1" />
+          <End Type="Toy_AuctionModel.CurrentBid" Role="CurrentBid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Auction">
+              <PropertyRef Name="AuctionID" />
+            </Principal>
+            <Dependent Role="CurrentBid">
+              <PropertyRef Name="AuctionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__CurrentBi__Bidde__2F10007B">
+          <End Type="Toy_AuctionModel.User" Role="User" Multiplicity="1" />
+          <End Type="Toy_AuctionModel.CurrentBid" Role="CurrentBid" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="CurrentBid">
+              <PropertyRef Name="BidderID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Toys__OwnerID__286302EC">
+          <End Type="Toy_AuctionModel.User" Role="User" Multiplicity="1" />
+          <End Type="Toy_AuctionModel.Toy" Role="Toy" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="User">
+              <PropertyRef Name="UserID" />
+            </Principal>
+            <Dependent Role="Toy">
+              <PropertyRef Name="OwnerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Toy_AuctionModelStoreContainer" CdmEntityContainer="Toy_AuctionEntities">
+          <EntitySetMapping Name="Colors">
+            <EntityTypeMapping TypeName="Toy_AuctionModel.Color">
+              <MappingFragment StoreEntitySet="Colors">
+                <ScalarProperty Name="ColorID" ColumnName="ColorID" />
+                <ScalarProperty Name="ColorName" ColumnName="ColorName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Toys">
+            <EntityTypeMapping TypeName="Toy_AuctionModel.Toy">
+              <MappingFragment StoreEntitySet="Toys">
+                <ScalarProperty Name="OwnerID" ColumnName="OwnerID" />
+                <ScalarProperty Name="ColorID" ColumnName="ColorID" />
+                <ScalarProperty Name="NumberLegs" ColumnName="NumberLegs" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="ToyID" ColumnName="ToyID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Auctions">
+            <EntityTypeMapping TypeName="Toy_AuctionModel.Auction">
+              <MappingFragment StoreEntitySet="Auctions">
+                <ScalarProperty Name="Duration" ColumnName="Duration" />
+                <ScalarProperty Name="AuctionStart" ColumnName="AuctionStart" />
+                <ScalarProperty Name="WinningBid" ColumnName="WinningBid" />
+                <ScalarProperty Name="WinningBidderID" ColumnName="WinningBidderID" />
+                <ScalarProperty Name="ToyID" ColumnName="ToyID" />
+                <ScalarProperty Name="AuctionID" ColumnName="AuctionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CurrentBids">
+            <EntityTypeMapping TypeName="Toy_AuctionModel.CurrentBid">
+              <MappingFragment StoreEntitySet="CurrentBids">
+                <ScalarProperty Name="Bid" ColumnName="Bid" />
+                <ScalarProperty Name="BidTime" ColumnName="BidTime" />
+                <ScalarProperty Name="AuctionID" ColumnName="AuctionID" />
+                <ScalarProperty Name="BidderID" ColumnName="BidderID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="Toy_AuctionModel.User">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="Zip" ColumnName="Zip" />
+                <ScalarProperty Name="State" ColumnName="State" />
+                <ScalarProperty Name="City" ColumnName="City" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

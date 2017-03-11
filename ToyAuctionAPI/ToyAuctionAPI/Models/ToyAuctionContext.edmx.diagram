@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="9484f8e50ad842a0996a0d4e944872d2" Name="Diagram1">
+        <EntityTypeShape EntityType="Toy_AuctionModel.Color" Width="1.875" PointX="0.5" PointY="0.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="Toy_AuctionModel.Toy" Width="1.5" PointX="5.25" PointY="0.625" />
+        <AssociationConnector Association="Toy_AuctionModel.FK__Toys__ColorID__276EDEB3" />
+        <EntityTypeShape EntityType="Toy_AuctionModel.Auction" Width="1.5" PointX="0.5" PointY="2.625" />
+        <EntityTypeShape EntityType="Toy_AuctionModel.CurrentBid" Width="1.5" PointX="2.625" PointY="4" />
+        <EntityTypeShape EntityType="Toy_AuctionModel.User" Width="1.5" PointX="5.25" PointY="3.625" />
+        <AssociationConnector Association="Toy_AuctionModel.FK__Auctions__ToyID__2B3F6F97" />
+        <AssociationConnector Association="Toy_AuctionModel.FK__Auctions__Winnin__2C3393D0" />
+        <AssociationConnector Association="Toy_AuctionModel.FK__CurrentBi__Aucti__300424B4" />
+        <AssociationConnector Association="Toy_AuctionModel.FK__CurrentBi__Bidde__2F10007B" />
+        <AssociationConnector Association="Toy_AuctionModel.FK__Toys__OwnerID__286302EC" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
